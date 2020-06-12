@@ -51,15 +51,15 @@ nodo_abb_t* arbol_buscar_nodo(nodo_abb_t* nodo, abb_comparador comparador, void*
 
     int resultado = comparador(nodo->elemento, elemento);
 	
-	if(resultado == 0){ // elemento == nodo->elemento
+	if(resultado == 0){ 
 		return nodo;
     }
 
 	if (resultado == 1){
-		return arbol_buscar_nodo(nodo->izquierda, comparador, elemento); // elemento < nodo->elemento => va a estar a la izquierda
+		return arbol_buscar_nodo(nodo->izquierda, comparador, elemento); 
     }
 
-	return arbol_buscar_nodo(nodo->derecha, comparador, elemento); // elemento > nodo->elemento => va a estar a la derecha
+	return arbol_buscar_nodo(nodo->derecha, comparador, elemento); 
 }
 
 void* arbol_buscar(abb_t* arbol, void* elemento){
@@ -114,18 +114,13 @@ int arbol_insertar(abb_t* arbol, void* elemento){
     
     padre =  arbol_buscar_nodo_padre(arbol->nodo_raiz, padre, arbol->comparador, elemento);
 
-    /*Busco si el nodo nuevo debe ir a la izq o a la derecha*/
-    abb_comparador cmp = arbol->comparador;
-
-    int restultado = cmp(padre->elemento, elemento);
+    int restultado = arbol->comparador(padre->elemento, elemento);
 
     if(restultado >= 0){
-        //va a la izq
         padre->izquierda = nodo_nuevo;
         padre->derecha = NULL;
 
     }else{
-        //va a la derecha
         padre->derecha = nodo_nuevo;
         padre->izquierda = NULL;
     }
@@ -150,4 +145,11 @@ void* arbol_raiz(abb_t* arbol){
     }
 
     return arbol->nodo_raiz->elemento;
+}
+
+int arbol_borrar(abb_t* arbol, void* elemento){
+    if(!arbol){
+        return ERROR;
+    }
+    return EXITO;
 }
