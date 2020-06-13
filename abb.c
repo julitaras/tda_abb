@@ -100,8 +100,9 @@ int arbol_insertar(abb_t* arbol, void* elemento){
     }
 
     /*Es el nodo raiz el que vamos a insertar*/
+    nodo_nuevo->elemento = elemento;
+    
     if(arbol_vacio(arbol)){
-        nodo_nuevo->elemento = elemento;
         nodo_nuevo->izquierda = NULL;
         nodo_nuevo->derecha = NULL;
 
