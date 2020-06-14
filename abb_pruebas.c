@@ -9,15 +9,16 @@
 
 /*Funcion comparadora de elementos*/
 int comparador(void* elem1, void* elem2){
+
     if(!elem1 || !elem2){
 		return 0;
     }
 
-    if(elem1 > elem2){
+    if(*(int*)elem1 > *(int*)elem2){
         return 1;
     }
 
-    if(elem1 < elem2){
+    if(*(int*)elem1 < *(int*)elem2){
         return -1;
     }
 
@@ -58,7 +59,7 @@ void prueba_arbol_insertar(){
 
     /* Declaro las variables a utilizar*/
     abb_t* abb = arbol_crear(comparador, NULL);
-    int a = 1, b = 2, c = 3, d =4;
+    int a = 4, b = 2, c = 5, d = 1;
 
     /*Inicio de pruebas*/
     prueba("El abb se creo con exito", abb != NULL);
@@ -67,8 +68,8 @@ void prueba_arbol_insertar(){
     prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
     prueba("El abb no esta vacio", !arbol_vacio(abb));
     
-    prueba("Inserto el segundo nodo", arbol_insertar(abb, &c) == 0);
-    prueba("Inserto el tercer nodo", arbol_insertar(abb, &b) == 0);
+    prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
+    prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
     prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
 }
 
@@ -125,11 +126,33 @@ void prueba_arbol_buscar(){
     prueba("Busco el elemento 5", arbol_buscar(abb, &c) == &c);
 }
 
+/*Prueba para funcion arbol_recorrido_inorden*/
+void prueba_in_order(){
+    printf("\nINICIO DE PRUEBAS ARBOL RECORRIDO IN ORDEN\n");
+
+    /* Declaro las variables a utilizar*/
+    abb_t* abb = arbol_crear(comparador, NULL);
+    int a = 4, b = 2, c = 5, d = 1;
+
+    /*Inicio de pruebas*/
+    prueba("El abb esta vacio", arbol_vacio(abb));
+
+    prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
+    prueba("La raiz del arbol es el elemento que acabo de insertar", arbol_raiz(abb) == &a);
+    prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
+    prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
+    prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
+    prueba("El abb no esta vacio", !arbol_vacio(abb));
+
+   // prueba("rECORRIDO EN ORDEN", in_order(abb));
+}
+
 int main(){
     prueba_arbol_crear();
     prueba_arbol_insertar();
     prueba_arbol_vacio();
     prueba_arbol_raiz();
     prueba_arbol_buscar();
+    prueba_in_order();
     return 0;
 }
