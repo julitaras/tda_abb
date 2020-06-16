@@ -369,15 +369,52 @@ int arbol_borrar(abb_t* arbol, void* elemento){
     
     if(!nodo_eliminar->derecha && !nodo_eliminar->izquierda){
         //NO TIENE HIJOS
+        int restultado = arbol->comparador(nodo_anterior->elemento, elemento);
 
+        if(restultado >= 0){
+            nodo_anterior->izquierda = NULL;
+
+        }else{
+            nodo_anterior->derecha = NULL;
+        }
         if(!nodo_anterior){
             arbol->nodo_raiz = NULL;
         }
-
-
     }
 
+    if( (nodo_eliminar->derecha && !nodo_eliminar->izquierda) && (!nodo_eliminar->derecha && nodo_eliminar->izquierda) ){
+        /*Si nodo_eliminar tiene 1 hijo, El elemento anterior se enlaza con el hijo del que queremos borrar*/
+        int restultado = arbol->comparador(nodo_anterior->elemento, elemento);
 
+        if(restultado >= 0){
+            if(nodo_eliminar->izquierda){
+                nodo_anterior->izquierda = nodo_eliminar->izquierda;
+            }else{
+                nodo_anterior->izquierda = nodo_eliminar->derecha;
+            }
+        }else{
+            if(nodo_eliminar->derecha){
+                nodo_anterior->derecha = nodo_eliminar->derecha;
+            }else{
+                nodo_anterior->derecha = nodo_eliminar->izquierda;
+            }
+        }
+        if(!nodo_anterior){
+            if(nodo_eliminar->izquierda){
+                arbol->nodo_raiz = nodo_eliminar->izquierda;
+            }else{
+                arbol->nodo_raiz = nodo_eliminar->derecha;
+            }
+        }
+    }
+
+    if(nodo_eliminar->derecha && nodo_eliminar->izquierda){
+        nodo_abb_t* nodo_reemplazo = arbol_buscar_nodo_reemplazo(nodo_eliminar->izquierda);
+        int restultado = arbol->comparador(nodo_anterior->elemento, elemento);
+        
+    }
+
+    return EXITO;
 }
 
 
