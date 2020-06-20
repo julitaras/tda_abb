@@ -5,6 +5,7 @@
 #define COLOR_ROJO	   "\x1b[1m\x1b[31m"
 #define COLOR_VERDE   "\x1b[1m\x1b[32m"
 #define COLOR_NORMAL   "\x1b[0m"
+#define COLOR_VIOLETA "\x1b[35;1m"
 
 
 /*Funcion comparadora de elementos*/
@@ -51,6 +52,7 @@ void prueba_arbol_crear(){
     /*Inicio de pruebas*/
     prueba("El abb se creo con exito", abb != NULL);
     prueba("El abb esta vacio", arbol_vacio(abb));
+    
     arbol_destruir(abb);
 }
 
@@ -72,6 +74,7 @@ void prueba_arbol_insertar(){
     prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
     prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
     prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
+    
     arbol_destruir(abb);
 }
 
@@ -88,7 +91,8 @@ void prueba_arbol_vacio(){
 
     prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
     prueba("El abb no esta vacio", !arbol_vacio(abb)); 
-     arbol_destruir(abb);  
+    
+    arbol_destruir(abb);  
 }
 
 /*Prueba para funcion arbol_raiz*/
@@ -107,7 +111,8 @@ void prueba_arbol_raiz(){
     prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
     prueba("La raiz del arbol sigue siendo la misma", arbol_raiz(abb) == &a);
     prueba("El abb no esta vacio", !arbol_vacio(abb));   
-     arbol_destruir(abb);
+    
+    arbol_destruir(abb);
 }
 
 /*Prueba para funcion arbol_buscar*/
@@ -128,7 +133,8 @@ void prueba_arbol_buscar(){
     prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
     prueba("El abb no esta vacio", !arbol_vacio(abb));
     prueba("Busco el elemento 5", arbol_buscar(abb, &c) == &c);
-     arbol_destruir(abb);
+    
+    arbol_destruir(abb);
 }
 
 /*Prueba para funcion arbol_recorrido_inorden*/
@@ -149,14 +155,106 @@ void prueba_in_order(){
     prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
     prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
     prueba("El abb no esta vacio", !arbol_vacio(abb));
-    prueba("La cantidad de elementos que guardo es la cantidad que pase", arbol_recorrido_inorden(abb, (void**)elementos, 3) == 3);
+    int cantidad = arbol_recorrido_inorden(abb, (void**)elementos, 3);
+    prueba("La cantidad de elementos que guardo es la cantidad que pase", cantidad == 3);
+    for(size_t i=0;i<cantidad;i++){
+        printf(COLOR_VIOLETA "%i ", *elementos[i]);
+    }
+    printf("\n"); 
     prueba("Paso otro array mas grande y guarda todo los elementos que son 4", arbol_recorrido_inorden(abb, (void**)elementos2, 6) == 4);
     
-    // int cantidad = arbol_recorrido_inorden(abb, (void**)elementos, 3);
-    // for(int i=0;i<cantidad;i++)
-	// 	printf("%i ", *elementos[i]);
-	// printf("\n");
-    //destruyo el arbol
+    arbol_destruir(abb);
+}
+/*Prueba para funcion arbol_recorrido_preorden*/
+void prueba_pre_order(){
+    printf("\nINICIO DE PRUEBAS ARBOL RECORRIDO PRE ORDEN\n");
+
+    /* Declaro las variables a utilizar*/
+    abb_t* abb = arbol_crear(comparador, NULL);
+    int a = 4, b = 2, c = 5, d = 1;
+    int* elementos[3];
+    int* elementos2[6];
+
+    /*Inicio de pruebas*/
+    prueba("El abb esta vacio", arbol_vacio(abb));
+    prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
+    prueba("La raiz del arbol es el elemento que acabo de insertar", arbol_raiz(abb) == &a);
+    prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
+    prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
+    prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
+    prueba("El abb no esta vacio", !arbol_vacio(abb));
+    int cantidad = arbol_recorrido_preorden(abb, (void**)elementos, 3);
+    prueba("La cantidad de elementos que guardo es la cantidad que pase", cantidad == 3);
+    for(size_t i=0;i<cantidad;i++){
+        printf(COLOR_VIOLETA "%i ", *elementos[i]);
+    }
+    printf("\n");
+    prueba("Paso otro array mas grande y guarda todo los elementos que son 4", arbol_recorrido_preorden(abb, (void**)elementos2, 6) == 4);
+    
+    arbol_destruir(abb);
+}
+
+/*Prueba para funcion arbol_recorrido_postorden*/
+void prueba_post_order(){
+    printf("\nINICIO DE PRUEBAS ARBOL RECORRIDO POST ORDEN\n");
+
+    /* Declaro las variables a utilizar*/
+    abb_t* abb = arbol_crear(comparador, NULL);
+    int a = 4, b = 2, c = 5, d = 1;
+    int* elementos[3];
+    int* elementos2[6];
+
+    /*Inicio de pruebas*/
+    prueba("El abb esta vacio", arbol_vacio(abb));
+    prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
+    prueba("La raiz del arbol es el elemento que acabo de insertar", arbol_raiz(abb) == &a);
+    prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
+    prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
+    prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
+    prueba("El abb no esta vacio", !arbol_vacio(abb));
+
+    int cantidad = arbol_recorrido_postorden(abb, (void**)elementos, 3);
+    prueba("La cantidad de elementos que guardo es la cantidad que pase", cantidad == 3);
+    printf("Recorrido post order con un array de tamanio 3: \n");
+    for(size_t i=0;i<cantidad;i++){
+        printf(COLOR_VIOLETA "%i ", *elementos[i]);
+    }
+    printf("\n");
+    cantidad = arbol_recorrido_postorden(abb, (void**)elementos2, 6);
+    prueba("Paso otro array mas grande y guarda todo los elementos que son 4", cantidad == 4);
+    
+    arbol_destruir(abb);
+}
+//Modificar pruebas de recorridos
+
+/*Prueba para funcion arbol_borrar*/
+void prueba_arbol_borrar(){
+    printf("\nINICIO DE PRUEBAS ARBOL BORRAR\n");
+
+    /* Declaro las variables a utilizar*/
+    abb_t* abb = arbol_crear(comparador, NULL);
+    int a = 4, b = 2, c = 6, d = 5, e = 1 , f = 8, g = 9, h = 7, i = 3;
+
+    /*Inicio de pruebas*/
+    prueba("El abb se creo con exito", abb != NULL);
+    prueba("El abb esta vacio", arbol_vacio(abb));
+
+    prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
+    prueba("El abb no esta vacio", !arbol_vacio(abb));
+    
+    prueba("Inserto el segundo nodo", arbol_insertar(abb, &b) == 0);
+    prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
+    prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
+    prueba("Inserto el quinto nodo", arbol_insertar(abb, &e) == 0);
+    prueba("Inserto el sexto nodo", arbol_insertar(abb, &f) == 0);
+    prueba("Inserto el septimo nodo", arbol_insertar(abb, &g) == 0);
+    prueba("Inserto el octavo nodo", arbol_insertar(abb, &h) == 0);
+    prueba("Inserto el noveno nodo", arbol_insertar(abb, &i) == 0);
+    prueba("Borro el octavo elemento, caso 0 hijos", arbol_borrar(abb, &h) == 0);
+    prueba("Borro el sexto elemento, caso 1 hijo", arbol_borrar(abb, &f) == 0);
+    prueba("Borro el segundo elemento, caso 2 hijo", arbol_borrar(abb, &b) == 0);
+    prueba("Borro la raiz", arbol_borrar(abb, &a) == 0);
+    
     arbol_destruir(abb);
 }
 
@@ -167,5 +265,8 @@ int main(){
     prueba_arbol_raiz();
     prueba_arbol_buscar();
     prueba_in_order();
+    prueba_pre_order();
+    prueba_post_order();
+    prueba_arbol_borrar();
     return 0;
 }
