@@ -438,71 +438,83 @@ void arbol_destruir(abb_t* arbol){
 /*
 * Funcion que se encarga del recorrido del in-order, recibe un nodo del arbol, 
 * una funcion que si devuelve true no debera recorrer mas 
-* y un puntero 'extra' que va como parametro en la funcion pasada por parametro 
+* y un puntero 'extra' que va como parametro en la funcion pasada por parametro.
+* Se tiene en cuenta que devuleve la llamada recursiva. Si devuelve false, 
+* significa que no debe recorrer mas. 
 */
-void recorrer_in_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
+bool recorrer_in_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
     if(!nodo){
-        return;
+        return true;
     }
 
-    if(nodo->izquierda){
-        recorrer_in_order(nodo->izquierda, funcion, extra);
+    if(!recorrer_in_order(nodo->izquierda, funcion, extra)){
+        return false;
     }
-
     
     if(funcion(nodo->elemento, extra)){
-        return;
+        return false;
     } 
 
-    if(nodo->derecha){
-        recorrer_in_order(nodo->derecha, funcion, extra);
+    if(!recorrer_in_order(nodo->derecha, funcion, extra)){
+        return false;
     }
+
+    return true;
 }
 
 /*
 * Funcion que se encarga del recorrido del pre-order, recibe un nodo del arbol, 
 * una funcion que si devuelve true no debera recorrer mas 
-* y un puntero 'extra' que va como parametro en la funcion pasada por parametro 
+* y un puntero 'extra' que va como parametro en la funcion pasada por parametro.
+* Se tiene en cuenta que devuleve la llamada recursiva. Si devuelve false, 
+* significa que no debe recorrer mas
 */
-void recorrer_pre_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
+bool recorrer_pre_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
     if(!nodo){
-        return;
+        return true;
     }
  
     if(funcion(nodo->elemento, extra)){
-        return;
+        return false;
     } 
  
 
-    if(nodo->izquierda){
-        recorrer_pre_order(nodo->izquierda, funcion, extra);
+    if(!recorrer_pre_order(nodo->izquierda, funcion, extra)){
+        return false;
     }
 
-    if(nodo->derecha){
-        recorrer_pre_order(nodo->derecha, funcion, extra);
+    if(!recorrer_pre_order(nodo->derecha, funcion, extra)){
+        return false;
     }
+
+    return true;
 }
 
 /*
 * Funcion que se encarga del recorrido del post-order, recibe un nodo del arbol, 
 * una funcion que si devuelve true no debera recorrer mas 
-* y un puntero 'extra' que va como parametro en la funcion pasada por parametro 
+* y un puntero 'extra' que va como parametro en la funcion pasada por parametro.
+* Se tiene en cuenta que devuleve la llamada recursiva. Si devuelve false, 
+* significa que no debe recorrer mas. 
 */
-void recorrer_post_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
+bool recorrer_post_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
     if(!nodo){
-        return;
-    }
-    if(nodo->izquierda){
-        recorrer_post_order(nodo->izquierda, funcion, extra);
+        return true;
     }
 
-    if(nodo->derecha){
-        recorrer_post_order(nodo->derecha, funcion, extra);
+    if(!recorrer_post_order(nodo->izquierda, funcion, extra)){
+        return false;
+    }
+
+    if(!recorrer_post_order(nodo->derecha, funcion, extra)){
+        return false;
     }
 
     if(funcion(nodo->elemento, extra)){
-        return;
-    } 
+        return false;
+    }
+
+    return true;
 }
 
 void abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra){
