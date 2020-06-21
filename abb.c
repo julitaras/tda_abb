@@ -113,6 +113,7 @@ bool arbol_vacio(abb_t* arbol){
     if(!arbol){
         return true;
     }
+
     if(!arbol->nodo_raiz){
         return true;
     }
@@ -121,7 +122,7 @@ bool arbol_vacio(abb_t* arbol){
 }
 
 void* arbol_raiz(abb_t* arbol){
-    if(!arbol){
+    if(!arbol || !arbol->nodo_raiz){
         return NULL;
     }
 

@@ -105,6 +105,7 @@ void prueba_arbol_raiz(){
 
     /*Inicio de pruebas*/
     prueba("El abb esta vacio", arbol_vacio(abb));
+    prueba("La raiz del arbol es NULL", arbol_raiz(abb) == NULL);
 
     prueba("Inserto el nodo raiz", arbol_insertar(abb, &a) == 0);
     prueba("La raiz del arbol es el elemento que acabo de insertar", arbol_raiz(abb) == &a);
