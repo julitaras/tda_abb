@@ -390,7 +390,7 @@ void arbol_destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
         arbol_destruir_nodo(nodo->derecha, destructor);
     }
 
-    if(nodo && destructor){
+    if(destructor){
         destructor(nodo->elemento);
     }
 
@@ -500,4 +500,3 @@ void abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, v
         break;
     }
 }
-
