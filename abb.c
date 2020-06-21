@@ -366,7 +366,7 @@ void arbol_borrar_2_hijos(abb_t* arbol, void* elemento, nodo_abb_t* nodo_elimina
             nodo_reemplazo->derecha = nodo_eliminar->derecha;
         }else{
             nodo_anterior->derecha = nodo_reemplazo;
-            nodo_reemplazo->izquierda = nodo_eliminar->izquierda;
+            nodo_reemplazo->derecha = nodo_eliminar->derecha;
         }
     }
 }
