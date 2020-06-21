@@ -290,6 +290,87 @@ nodo_abb_t* arbol_buscar_padre(abb_t* arbol, nodo_abb_t* nodo_eliminar, nodo_abb
     return nodo_anterior;
 }
 
+/*
+* Funcion que asigna los punteros como corresponden
+* en el caso de que el nodo que estemos eliminando 
+* no tenga hijos
+*/
+void arbol_borrar_0_hijos(abb_t* arbol, void* elemento, nodo_abb_t* nodo_eliminar, nodo_abb_t* nodo_anterior){
+    if(!nodo_anterior){
+        arbol->nodo_raiz = NULL;
+    }else{
+        int resultado = arbol->comparador(nodo_anterior->elemento, elemento);
+        if(resultado >= 0){
+            nodo_anterior->izquierda = NULL;
+        }else{
+            nodo_anterior->derecha = NULL;
+        }
+    }
+} 
+
+/*
+* Funcion que asigna los punteros como corresponden
+* en el caso de que el nodo que estemos eliminando 
+* tenga un hijo
+*/
+void arbol_borrar_1_hijo(abb_t* arbol, void* elemento, nodo_abb_t* nodo_eliminar, nodo_abb_t* nodo_anterior){
+    if(!nodo_anterior){
+        if(nodo_eliminar->izquierda){
+            arbol->nodo_raiz = nodo_eliminar->izquierda;
+        }else{
+            arbol->nodo_raiz = nodo_eliminar->derecha;
+        }
+    }else{
+        int resultado = arbol->comparador(nodo_anterior->elemento, elemento);
+        if(resultado >= 0){
+            if(nodo_eliminar->izquierda){
+                nodo_anterior->izquierda = nodo_eliminar->izquierda;
+            }else{
+                nodo_anterior->izquierda = nodo_eliminar->derecha;
+            }
+        }else{
+            if(nodo_eliminar->derecha){
+                nodo_anterior->derecha = nodo_eliminar->derecha;
+            }else{
+                nodo_anterior->derecha = nodo_eliminar->izquierda;
+            }
+        }
+    }
+}
+
+/*
+* Funcion que asigna los punteros como corresponden
+* en el caso de que el nodo que estemos eliminando
+* tenga dos hijos
+*/
+void arbol_borrar_2_hijos(abb_t* arbol, void* elemento, nodo_abb_t* nodo_eliminar, nodo_abb_t* nodo_anterior){
+    nodo_abb_t* nodo_reemplazo = arbol_buscar_nodo_reemplazo(nodo_eliminar->izquierda);
+    nodo_abb_t* nodo_anterior_reemplazo = NULL;
+    nodo_anterior_reemplazo = arbol_buscar_padre(arbol, nodo_reemplazo, arbol->nodo_raiz, nodo_anterior_reemplazo);
+    if(!nodo_anterior){
+        int resultado = arbol->comparador(nodo_anterior_reemplazo->elemento, nodo_reemplazo->elemento);
+        if(resultado >= 0){
+            nodo_anterior_reemplazo->izquierda = NULL;
+        }else{
+            nodo_anterior_reemplazo->derecha = NULL;
+        }
+        if(!nodo_reemplazo->izquierda){
+            nodo_reemplazo->izquierda = nodo_eliminar->izquierda;
+        }
+        nodo_reemplazo->derecha = nodo_eliminar->derecha;
+        arbol->nodo_raiz = nodo_reemplazo;
+    }else{
+        int resultado = arbol->comparador(nodo_anterior->elemento, nodo_reemplazo->elemento);
+        if(resultado >= 0){
+            nodo_anterior->izquierda = nodo_reemplazo;
+            nodo_reemplazo->derecha = nodo_eliminar->derecha;
+        }else{
+            nodo_anterior->derecha = nodo_reemplazo;
+            nodo_reemplazo->izquierda = nodo_eliminar->izquierda;
+        }
+    }
+}
+
 int arbol_borrar(abb_t* arbol, void* elemento){
     if(!arbol){
         return ERROR;
@@ -300,68 +381,15 @@ int arbol_borrar(abb_t* arbol, void* elemento){
     nodo_anterior = arbol_buscar_padre(arbol, nodo_eliminar, arbol->nodo_raiz, nodo_anterior);
 
     if(!nodo_eliminar->derecha && !nodo_eliminar->izquierda){
-        if(!nodo_anterior){
-            arbol->nodo_raiz = NULL;
-        }else{
-            int resultado = arbol->comparador(nodo_anterior->elemento, elemento);
-            if(resultado >= 0){
-                nodo_anterior->izquierda = NULL;
-            }else{
-                nodo_anterior->derecha = NULL;
-            }
-        }
+        arbol_borrar_0_hijos(arbol, elemento, nodo_eliminar, nodo_anterior);
     }
 
     if( (nodo_eliminar->derecha && !nodo_eliminar->izquierda) || (!nodo_eliminar->derecha && nodo_eliminar->izquierda) ){
-        if(!nodo_anterior){
-            if(nodo_eliminar->izquierda){
-                arbol->nodo_raiz = nodo_eliminar->izquierda;
-            }else{
-                arbol->nodo_raiz = nodo_eliminar->derecha;
-            }
-        }else{
-            int resultado = arbol->comparador(nodo_anterior->elemento, elemento);
-            if(resultado >= 0){
-                if(nodo_eliminar->izquierda){
-                    nodo_anterior->izquierda = nodo_eliminar->izquierda;
-                }else{
-                    nodo_anterior->izquierda = nodo_eliminar->derecha;
-                }
-            }else{
-                if(nodo_eliminar->derecha){
-                    nodo_anterior->derecha = nodo_eliminar->derecha;
-                }else{
-                    nodo_anterior->derecha = nodo_eliminar->izquierda;
-                }
-            }
-        }
+        arbol_borrar_1_hijo(arbol, elemento, nodo_eliminar, nodo_anterior);
     }
 
     if(nodo_eliminar->derecha && nodo_eliminar->izquierda){
-        nodo_abb_t* nodo_reemplazo = arbol_buscar_nodo_reemplazo(nodo_eliminar->izquierda);
-        nodo_abb_t* nodo_anterior_reemplazo = NULL;
-        nodo_anterior_reemplazo = arbol_buscar_padre(arbol, nodo_reemplazo, arbol->nodo_raiz, nodo_anterior_reemplazo);
-        if(!nodo_anterior){
-            int resultado = arbol->comparador(nodo_anterior_reemplazo->elemento, nodo_reemplazo->elemento);
-            if(resultado >= 0){
-                nodo_anterior_reemplazo->izquierda = NULL;
-            }else{
-                nodo_anterior_reemplazo->derecha = NULL;
-            }
-            if(!nodo_reemplazo->izquierda)
-                nodo_reemplazo->izquierda = nodo_eliminar->izquierda;
-            nodo_reemplazo->derecha = nodo_eliminar->derecha;
-            arbol->nodo_raiz = nodo_reemplazo;
-        }else{
-            int resultado = arbol->comparador(nodo_anterior->elemento, nodo_reemplazo->elemento);
-            if(resultado >= 0){
-                nodo_anterior->izquierda = nodo_reemplazo;
-                nodo_reemplazo->derecha = nodo_eliminar->derecha;
-            }else{
-                nodo_anterior->derecha = nodo_reemplazo;
-                nodo_reemplazo->izquierda = nodo_eliminar->izquierda;
-            }
-        }
+        arbol_borrar_2_hijos(arbol, elemento, nodo_eliminar, nodo_anterior);
     }
 
     if(arbol->destructor){
