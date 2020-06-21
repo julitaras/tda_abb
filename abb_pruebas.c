@@ -304,15 +304,15 @@ void prueba_iterador_interno(){
     prueba("Inserto el tercer nodo", arbol_insertar(abb, &c) == 0);
     prueba("Inserto el cuarto nodo", arbol_insertar(abb, &d) == 0);
     
-    printf(COLOR_NORMAL "RECORRIDO IN-ORDER \n");
+    printf(COLOR_NORMAL "RECORRIDO IN-ORDER, RESULTADO: 2 + 4 + 5 + 6 \n");
     int extra=0;
     abb_con_cada_elemento(abb, ABB_RECORRER_INORDEN, sumar_elemento, (void*)&extra);
     
-    printf(COLOR_NORMAL "RECORRIDO PRE-ORDER \n");
+    printf(COLOR_NORMAL "RECORRIDO PRE-ORDER, RESULTADO: 4 + 2 + 6 + 5 \n");
     extra=0;
     abb_con_cada_elemento(abb, ABB_RECORRER_PREORDEN, sumar_elemento, (void*)&extra);
     
-    printf(COLOR_NORMAL "RECORRIDO POST-ORDER \n");
+    printf(COLOR_NORMAL "RECORRIDO POST-ORDER, RESULTADO: 2 + 5 + 6 + 4 \n");
     extra=0;
     abb_con_cada_elemento(abb, ABB_RECORRER_POSTORDEN, sumar_elemento, (void*)&extra);
     arbol_destruir(abb);
