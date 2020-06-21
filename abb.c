@@ -384,7 +384,7 @@ int arbol_borrar(abb_t* arbol, void* elemento){
         arbol_borrar_0_hijos(arbol, elemento, nodo_eliminar, nodo_anterior);
     }
 
-    if( (nodo_eliminar->derecha && !nodo_eliminar->izquierda) || (!nodo_eliminar->derecha && nodo_eliminar->izquierda) ){
+    if((nodo_eliminar->derecha && !nodo_eliminar->izquierda) || (!nodo_eliminar->derecha && nodo_eliminar->izquierda)){
         arbol_borrar_1_hijo(arbol, elemento, nodo_eliminar, nodo_anterior);
     }
 
