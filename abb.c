@@ -269,6 +269,9 @@ nodo_abb_t* arbol_buscar_nodo_reemplazo(nodo_abb_t* nodo){
     return nodo;
 }
 
+/*
+* Funcion que se encarga de buscar el padre de un nodo
+*/
 nodo_abb_t* arbol_buscar_padre(abb_t* arbol, nodo_abb_t* nodo_eliminar, nodo_abb_t* nodo_actual, nodo_abb_t* nodo_anterior){
     if(!arbol){
         return NULL;
@@ -402,3 +405,98 @@ void arbol_destruir(abb_t* arbol){
 
 	free(arbol);
 }
+
+/*
+* Funcion que se encarga del recorrido del in-order, recibe un nodo del arbol, 
+* una funcion que si devuelve true no debera recorrer mas 
+* y un puntero 'extra' que va como parametro en la funcion pasada por parametro 
+*/
+void recorrer_in_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
+    if(!nodo){
+        return;
+    }
+
+    if(nodo->izquierda){
+        recorrer_in_order(nodo->izquierda, funcion, extra);
+    }
+
+    if(nodo){
+        if(funcion(nodo->elemento, extra)){
+            return;
+        } 
+    }
+
+    if(nodo->derecha){
+        recorrer_in_order(nodo->derecha, funcion, extra);
+    }
+}
+
+/*
+* Funcion que se encarga del recorrido del pre-order, recibe un nodo del arbol, 
+* una funcion que si devuelve true no debera recorrer mas 
+* y un puntero 'extra' que va como parametro en la funcion pasada por parametro 
+*/
+void recorrer_pre_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
+    if(!nodo){
+        return;
+    }
+
+    if(nodo){
+        if(funcion(nodo->elemento, extra)){
+            return;
+        } 
+    }
+
+    if(nodo->izquierda){
+        recorrer_in_order(nodo->izquierda, funcion, extra);
+    }
+
+    if(nodo->derecha){
+        recorrer_in_order(nodo->derecha, funcion, extra);
+    }
+}
+
+/*
+* Funcion que se encarga del recorrido del post-order, recibe un nodo del arbol, 
+* una funcion que si devuelve true no debera recorrer mas 
+* y un puntero 'extra' que va como parametro en la funcion pasada por parametro 
+*/
+void recorrer_post_order(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra){
+    if(!nodo){
+        return;
+    }
+
+    if(nodo->izquierda){
+        recorrer_in_order(nodo->izquierda, funcion, extra);
+    }
+
+    if(nodo->derecha){
+        recorrer_in_order(nodo->derecha, funcion, extra);
+    }
+
+    if(nodo){
+        if(funcion(nodo->elemento, extra)){
+            return;
+        } 
+    }
+}
+
+void abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra){
+    if(!arbol){
+        return;
+    }
+
+    switch (recorrido)
+    {
+    case ABB_RECORRER_INORDEN:
+        recorrer_in_order(arbol->nodo_raiz, funcion, extra);
+        break;
+    case ABB_RECORRER_PREORDEN:
+        recorrer_pre_order(arbol->nodo_raiz, funcion, extra);
+        break;
+    case ABB_RECORRER_POSTORDEN:
+        recorrer_post_order(arbol->nodo_raiz, funcion, extra);
+        break;
+    }
+}
+
